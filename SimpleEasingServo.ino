@@ -1,20 +1,21 @@
 /*
  * Easing
- * Pato
- * July 12, 2017
+ * Tobias Toft <hello@tobiastoft.dk>
+ * July 27, 2009
  *
- * Move a servo with easing (smooth)
- * 
-  * Easing functions based on Robert Penner's work,
+ * Moves a servo motor back and forth between 0 and 140 degrees
+ * when a button is pressed.
+ *
+ * This example is using the Servo.h library that comes
+ * with the Arduino IDE.
+ *
+ * Easing functions based on Robert Penner's work,
  * for more info see Easing.h or Easing.cpp
  */
 
-
 #include <Servo.h>
-int target;
-int origin;
-
-/* here you can change to any other type of easing from Easing.h */
+int pri;
+int sec;
 
 float easeInOutQuad (float t, float b, float c, float d)
 {
@@ -24,25 +25,35 @@ float easeInOutQuad (float t, float b, float c, float d)
 
 Servo myServo; //create servo object
 
+
 void setup(){
-  myServo.attach(8); //attach servo at pin 8
-  myServo.write(165);  //put servo at 165 degrees
+  myServo.attach(8); //attach servo at pin 9
+  myServo.write(80);  //put servo at 0 degrees
   }
 
 void loop(){
-  moveServo(100);  /* the number inside represents the 'target' */
-delay(1500);
-  moveServo(165);
- delay(1500);
+  pri=80;
+  sec=170;
+  moveServo();
+  pri=170;
+  sec=80;
+  moveServo();
+  delay(1500);
+  
+  
+  
 }
 
-void moveServo(int target){
-  origin = target;
+void moveServo(){
   int dur = 100; //duration is 100 loops
   for (int pos=0; pos<dur; pos++){
-    myServo.write(easeInOutQuad(pos, origin,target-origin , dur));
+    //move servo from 0 and 140 degrees forward
+    myServo.write(easeInOutQuad(pos, pri,sec-pri , dur));
     delay(15); //wait for the servo to move
   }
-   delay(1000);
+  
+  delay(1000); //wait a second, then move back using "bounce" easing
+  
+ 
  
 }
